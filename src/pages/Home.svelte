@@ -1,6 +1,4 @@
 <script>
-import App from '../App.svelte';
-
     import CharityList from "../components/CharityList.svelte";
     import Header from "../components/Header.svelte";
     import Welcome from "../components/Welcome.svelte";

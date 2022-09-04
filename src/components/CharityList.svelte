@@ -38,10 +38,11 @@ function handleCloseModal() {
 	.show {
 	  display: block;
 	  background-color: rgba(0, 0, 0, 0.45);
-	}
-	.pledged {
+  }
+	/* .pledged {
 	  margin-right: 2em;
-	}
+	} */
+  
 </style>
 
 	<!-- popularCauses section -->
