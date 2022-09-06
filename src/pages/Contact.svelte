@@ -2,7 +2,8 @@
     import Header from '../components/Header.svelte';
     import Footer from '../components/Footer.svelte';
     import Welcome from '../components/Welcome.svelte';
-      google.maps.event.addDomListener(window, 'load', init);
+
+     google.maps.event.addDomListener(window, 'load', init);
 
     function init() {
         // Basic options for a simple Google Map
