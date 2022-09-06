@@ -2,7 +2,7 @@
 	<section class="xs-section-padding">
 		<div class="container">
 			<div class="xs-heading xs-mb-70 text-center">
-				<h2 class="xs-mb-0 xs-title">We’ve funded <span>120,00 charity projects</span> for <br> 20M people
+				<h2 class="xs-mb-0 xs-title">We ve funded <span>120,00 charity projects</span> for <br> 20M people
 					around the world.</h2>
 			</div>
 			<div class="row">
