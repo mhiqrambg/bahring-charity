@@ -1,7 +1,8 @@
 <script>
+  import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 	import Modal from "./Modal.svelte";
-    export let charities;
 
+  export let charities;
 	let isModalOpen = false;
 
 function calculateFunded(pledged, target) {
@@ -39,9 +40,13 @@ function handleCloseModal() {
 	  display: block;
 	  background-color: rgba(0, 0, 0, 0.45);
   }
-	/* .pledged {
-	  margin-right: 2em;
-	} */
+	.funded {
+	  margin-left: -1em;
+	}
+
+  .daystoend{
+    margin-left: -9em;
+  }
   
 </style>
 
@@ -55,9 +60,9 @@ function handleCloseModal() {
 					<p>FundPress has built a platform focused on aiding entrepreneurs, startups, and <br> DALAM PENGEMBANGAN</p>
 				</div><!-- .xs-heading-title END -->
 			</div><!-- .row end -->
-			{#if charities !== undefined}
-			{#each charities as charity}
+			
 			<div class="row">
+        {#each charities as charity}
 				<div class="col-lg-4 col-md-6">
 					{#if isModalOpen == true}
 			<Modal>
@@ -159,9 +164,15 @@ function handleCloseModal() {
 							<a href="#" class="xs-post-title xs-mb-30">{charity.title}</a>
 
 							<ul class="xs-list-with-content">
-								<li>{formatCurrency(charity.pledged)}<span>Pledged</span></li>
-								<li><span class="number-percentage-count number-percentage" data-value="90"
+                <!-- <li class="pledged"> -->
+								  <li>{formatCurrency(charity.pledged)}
+                  <span>Pledged</span>
+                </li>
+								<li>
+                  <li class="funded">
+                  <span class="number-percentage-count number-percentage" data-value="90"
 										data-animation-duration="3500">{calculateFunded(charity.pledged, charity.target)}</span>% <span>Funded</span></li>
+                    <li class="daystoend">
 								<li>{calculateDaysRemaining(charity.date_end)}<span>Days to go</span></li>
 							</ul>
 
@@ -187,9 +198,9 @@ function handleCloseModal() {
 						</div><!-- .xs-item-content END -->
 					</div><!-- .xs-popular-item END -->
 				</div>
+        {/each}
 			</div><!-- .row end -->
-			{/each}
-			{/if}
+
 		</div><!-- .container end -->
 	</section><!-- End popularCauses section -->
 

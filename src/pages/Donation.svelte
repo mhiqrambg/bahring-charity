@@ -1,18 +1,21 @@
 <script>
+    import { onMount} from 'svelte';
     import Header from '../components/Header.svelte';
     import Footer from '../components/Footer.svelte';
-    import { charities } from '../data/charities';
 
     export let params;
-    let data;
+    let charity, amount, name, email, agree = false;
 
-    function getCharity(id){
-        return charities.find(function(charity){
-            return charity.id === parseInt(id);
-        })
+    async function getCharity(id) {
+        const res = await fetch(`https://charity-api-bwa.herokuapp.com/charities/${id}`);
+        return res.json();
     }
 
-    data = getCharity(params.id);
+    onMount(async function(){
+        charity = await getCharity(params.id)
+
+    });
+
 </script>
 <style>
     #xs-input-checkbox {
@@ -33,17 +36,17 @@
 <Header />
 <!-- welcome section -->
 	<!--breadcumb start here-->
-    {#if data}
+    {#if charity}
 	<section class="xs-banner-inner-section parallax-window" style=
 	"background-image:url('/assets/images/backgrounds/kat-yukawa-K0E6E0a0R3A-unsplash.jpg')">
 	    <div class="xs-black-overlay"></div>
 	    <div class="container">
 	    <div class="color-white xs-inner-banner-content">
 	        <h2>Donate Now</h2>
-	        <p>{data.title}</p>
+	        <p>{charity.title}</p>
 	        <ul class="xs-breadcumb">
 	            <li class="badge badge-pill badge-primary">
-	                <a href="index.html" class="color-white">Home /</a> Donate
+	                <a href="/" class="color-white">Home /</a> Donate
 	            </li>
 	        </ul>
 	    </div>
@@ -58,13 +61,13 @@
 	            <div class="col-lg-6">
 	                <div class="xs-donation-form-images">
                         <img src=
-	{data.thumbnail} alt=
+	{charity.thumbnail} alt=
 	"Family Images"></div>
 	            </div>
 	        <div class="col-lg-6">
 	            <div class="xs-donation-form-wraper">
 	                <div class="xs-heading xs-mb-30">
-	                    <h2 class="xs-title">{data.title}</h2>
+	                    <h2 class="xs-title">{charity.title}</h2>
 	                    <p class="small">To learn more about make donate charity
 	with us visit our "<span class="color-green">Contact
 	us</span>" site. By calling <span class=
@@ -84,7 +87,7 @@
                     name="amount"
                     id="xs-donate-amount"
                     class="form-control"
-
+                    bind:value={amount}
                     placeholder="Your donation in Rupiah" />
                 </div>
                 <!-- .xs-input-group END -->
@@ -98,7 +101,7 @@
                     name="name"
                     id="xs-donate-name"
                     class="form-control"
-                    
+                    bind:value={name}
                     placeholder="Your awesome name" />
                 </div>
                 <div class="xs-input-group">
@@ -109,11 +112,18 @@
                   <input
                     type="email"
                     name="email"
-                    
+                    bind:value={email}
                     id="xs-donate-email"
                     class="form-control"
                     placeholder="email@awesome.com" />
                 </div>
+                <div class="xs-input-group">
+                    <label for="xs-donate-agree">
+                        Terimakasih {name} atas donasi yang telah Anda berikan, Insya Allah donasi akan kami sampaikan untuk {charity.title} melalui {charity.profile_name},
+                        Semoga menjadi Amal Jariyah dan Allah memberi keberkahan atas apa yang Anda berikan.
+                      <span class="color-light-red">&#10084;&#10084;&#10084;</span>
+                    </label>
+                  </div>
                 <div class="xs-input-group" id="xs-input-checkbox">
                   <input
                     type="checkbox"
