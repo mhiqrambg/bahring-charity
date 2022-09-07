@@ -1,20 +1,47 @@
 <script>
-    import { onMount} from 'svelte';
+    import router from 'page';
     import Header from '../components/Header.svelte';
     import Footer from '../components/Footer.svelte';
+    import Loader from '../components/Loader.svelte';
 
     export let params;
-    let charity, amount, name, email, agree = false;
+    let charity, 
+        amount,
+        name,
+        email,
+        agree = false;
+
+    let data = getCharity(params.id);
 
     async function getCharity(id) {
         const res = await fetch(`https://charity-api-bwa.herokuapp.com/charities/${id}`);
         return res.json();
     }
 
-    onMount(async function(){
-        charity = await getCharity(params.id)
+    function handleButtomClick(){
+      console.log("handleButtomClick");
+    }
 
-    });
+    async function handleForm(event){
+      charity.pledged = charity.pledged + parseInt(amount);
+      try {
+        const res= await fetch(`https://charity-api-bwa.herokuapp.com/charities/${params.id}`,
+        {
+          method: "PUT",
+          headers: {
+            'content-type': "application/json"
+          },
+          body: JSON.stringify(charity),
+        }
+        );
+      console.log( res );
+      //redire
+      router.redirect('/succes');
+      } catch (err) {
+        console.log(err);
+      }
+
+    }
 
 </script>
 <style>
@@ -32,11 +59,14 @@
     .xs-donation-form-images {
       text-align: center;
     }
+    
   </style>
 <Header />
 <!-- welcome section -->
 	<!--breadcumb start here-->
-    {#if charity}
+  {#await data}
+      <Loader />
+  {:then charity}
 	<section class="xs-banner-inner-section parallax-window" style=
 	"background-image:url('/assets/images/backgrounds/kat-yukawa-K0E6E0a0R3A-unsplash.jpg')">
 	    <div class="xs-black-overlay"></div>
@@ -76,7 +106,9 @@
 	</div>
     
     <!-- .xs-heading end -->
-	<form action="#" method="post" id="xs-donation-form" class=
+	<form 
+  on:submit|preventDefault={handleForm}
+  action="#" method="post" id="xs-donation-form" class=
 	"xs-donation-form" name="xs-donation-form">
 	    <div class="xs-input-group">
 	        <label for="xs-donate-name">Donation Amount <span class=
@@ -88,6 +120,7 @@
                     id="xs-donate-amount"
                     class="form-control"
                     bind:value={amount}
+                    required = "true"
                     placeholder="Your donation in Rupiah" />
                 </div>
                 <!-- .xs-input-group END -->
@@ -102,6 +135,7 @@
                     id="xs-donate-name"
                     class="form-control"
                     bind:value={name}
+                    required = "true"
                     placeholder="Your awesome name" />
                 </div>
                 <div class="xs-input-group">
@@ -113,6 +147,7 @@
                     type="email"
                     name="email"
                     bind:value={email}
+                    required = "true"
                     id="xs-donate-email"
                     class="form-control"
                     placeholder="email@awesome.com" />
@@ -128,7 +163,8 @@
                   <input
                     type="checkbox"
                     name="agree"
-                    id="xs-donate-agree">
+                    id="xs-donate-agree"
+                    bind:checked={agree} />
                   <label for="xs-donate-agree">
                     I Agree
                     <span class="color-light-red">**</span>
@@ -160,7 +196,9 @@
 	</div>.
     <--xs-input-group END -->
 
-	<button type="submit" class="btn btn-warning"><span class=
+	<button type="submit" on:click|once={handleButtomClick} 
+  disabled = {!agree}
+  class="btn btn-warning"><span class=
 	"badge"><i class="fa fa-heart"></i></span> Donate
 	now</button>
 	</form><!-- .xs-donation-form #xs-donation-form END -->
@@ -170,5 +208,5 @@
 	</div><!-- .container end -->
 	</section><!-- End donation form section -->
 	</main>
-    {/if}
+    {/await}
     <Footer />

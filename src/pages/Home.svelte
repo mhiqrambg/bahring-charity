@@ -7,11 +7,23 @@
     import Footer from "../components/Footer.svelte";
 
     let title = "Charity";
-    let charities =[];
+    let data = getData();
+
+    async function getData(){
+      const res = await fetch('https://charity-api-bwa.herokuapp.com/charities');
+      const data = await res.json();
+
+        if (res.ok){
+          return data;
+        } else{
+          throw new Error (data);
+        }
+    }
+
+
 
     onMount(async function(){
-      const res = await fetch('https://charity-api-bwa.herokuapp.com/charities');
-      charities = await res.json()
+      
     });
 
 
@@ -19,6 +31,15 @@
 
     <Header />
     <Welcome />
-    <CharityList {charities}/>
+    {#await data}
+    <div id="preloader">
+      <div class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+      </div>
+      </div><!-- #preloader -->
+    {:then charities}
+      <CharityList {charities}/>
+    {/await}
     <Promo />
     <Footer />

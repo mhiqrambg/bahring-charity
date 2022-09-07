@@ -45,7 +45,7 @@ function handleCloseModal() {
 	}
 
   .daystoend{
-    margin-left: -9em;
+    margin-right: -10em;
   }
   
 </style>
