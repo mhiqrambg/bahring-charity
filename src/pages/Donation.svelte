@@ -44,7 +44,7 @@ async function handleForm(event) {
           resolve({ status: 200, ok: true });
         }, 1000);
       });
-      console.log('Donasi berhasil:', res);
+      console.log('Donasi berhasill:', res);
       // Navigasi ke halaman success menggunakan router
       router('/success'); // Ganti router.navigate dengan router
     } catch (err) {
