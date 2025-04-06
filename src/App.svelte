@@ -6,7 +6,8 @@
   import Donation from './pages/Donation.svelte';
   import NotFound from './pages/NotFound.svelte';
   import Success from './pages/Success.svelte';
-  import Failure from "./pages/Failure.svelte";
+  import Errors from "./pages/Error.svelte";
+
 
   let page, params;
 
@@ -15,7 +16,7 @@
   router('/about', () => (page = About));
   router('/contact', () => (page = Contact));
   router('/success', () => (page = Success));
-  router('/error', () => (page = Failure));
+  router('/error', () => (page = Errors));
   router('/donation/:id', (ctx) => {
       params = ctx.params; // Ambil parameter dari URL
       page = Donation; // Tampilkan halaman Donation
