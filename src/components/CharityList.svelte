@@ -147,11 +147,11 @@ function handleCloseModal() {
 					<div class="xs-popular-item xs-box-shadow">
 						<div class="xs-item-header">
 
-							<img src={charity.thumbnail} alt="">
+							<img src={charity.image} alt="">
 
 							<div class="xs-skill-bar">
 								<div class="xs-skill-track">
-									<p>{calculateFunded(charity.pledged, charity.target)}<span class="number-percentage-count number-percentage" data-value="90"
+									<p>{calculateFunded(charity.raised || 0, charity.goal || 1)}<span class="number-percentage-count number-percentage" data-value="90"
 										data-animation-duration="3500">%</span></p>
 								</div>
 							</div>
@@ -164,26 +164,27 @@ function handleCloseModal() {
 							<a href="#" class="xs-post-title xs-mb-30">{charity.title}</a>
 
 							<ul class="xs-list-with-content">
-                <!-- <li class="pledged"> -->
-								  <li>{formatCurrency(charity.pledged)}
+								<li>
+                  {formatCurrency(charity.raised || 0)}
                   <span>Pledged</span>
                 </li>
-								<li>
-                  <li class="funded">
+								<li class="funded">
                   <span class="number-percentage-count number-percentage" data-value="90"
-										data-animation-duration="3500">{calculateFunded(charity.pledged, charity.target)}</span>% <span>Funded</span></li>
-                    <li class="daystoend">
-								<li>{calculateDaysRemaining(charity.date_end)}<span>Days to go</span></li>
+										data-animation-duration="3500">{calculateFunded(charity.raised || 0, charity.goal || 1)}</span>% <span>Funded</span>
+                </li>
+								<li class="daystoend">
+                  {calculateDaysRemaining(new Date(Date.now() + 30*24*60*60*1000))}<span>Days to go</span>
+                </li>
 							</ul>
 
 							<span class="xs-separetor"></span>
 
 							<div class="row xs-margin-0">
 								<div class="xs-round-avatar">
-									<img src="{charity.profile_photo}" alt="">
+									<img src="\assets\images\avatar\avatar_1.jpg" alt="">
 								</div>
 								<div class="xs-avatar-title">
-									<a href="#"><span>By</span>{charity.profile_name}</a>
+									<a href="#"><span>By</span>Admin</a>
 								</div>
 							</div>
 

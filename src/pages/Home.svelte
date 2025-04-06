@@ -5,41 +5,19 @@
     import Welcome from "../components/Welcome.svelte";
     import Promo from "../components/Promo.svelte";
     import Footer from "../components/Footer.svelte";
+    import { getAllCharities } from "../data/charities.js";
 
     let title = "Charity";
-    let data = getData();
-
-    async function getData(){
-      const res = await fetch('https://charity-api-bwa.herokuapp.com/charities');
-      const data = await res.json();
-
-        if (res.ok){
-          return data;
-        } else{
-          throw new Error (data);
-        }
-    }
-
-
+    let charities = getAllCharities();
 
     onMount(async function(){
-      
+      // Kode inisialisasi jika diperlukan
     });
-
 
 </script>
 
     <Header />
     <Welcome />
-    {#await data}
-    <div id="preloader">
-      <div class="spinner">
-      <div class="double-bounce1"></div>
-      <div class="double-bounce2"></div>
-      </div>
-      </div><!-- #preloader -->
-    {:then charities}
-      <CharityList {charities}/>
-    {/await}
+    <CharityList {charities}/>
     <Promo />
     <Footer />

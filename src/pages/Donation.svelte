@@ -3,6 +3,7 @@
     import Header from '../components/Header.svelte';
     import Footer from '../components/Footer.svelte';
     import Loader from '../components/Loader.svelte';
+    import { getCharityById } from '../data/charities.js';
 
     export let params;
     let charity, 
@@ -11,37 +12,52 @@
         email,
         agree = false;
 
+    // Menggunakan data dummy dari charities.js
     let data = getCharity(params.id);
-
+    
     async function getCharity(id) {
-        const res = await fetch(`https://charity-api-bwa.herokuapp.com/charities/${id}`);
-        return res.json();
+        // Menggunakan data dummy sebagai pengganti API
+        return new Promise(resolve => {
+            setTimeout(() => {
+                const result = getCharityById(id);
+                charity = result; // sMenyimpan hasil ke variabel charity
+                resolve(result);
+            }, 500); // Simulasi delay jaringan
+        });
     }
 
+    // Fungsi handleButtomClick tidak diperlukan lagi karena form sudah memiliki handler submit
     function handleButtomClick(){
-      console.log("handleButtomClick");
+      console.log("Button clicked");
     }
 
-    async function handleForm(event){
-      charity.pledged = charity.pledged + parseInt(amount);
-      try {
-        const res= await fetch(`https://charity-api-bwa.herokuapp.com/charities/${params.id}`,
-        {
-          method: "PUT",
-          headers: {
-            'content-type': "application/json"
-          },
-          body: JSON.stringify(charity),
-        }
-        );
-      console.log( res );
-      //redire
-      router.redirect('/succes');
-      } catch (err) {
-        console.log(err);
-      }
-
+async function handleForm(event) {
+  // Pastikan charity dan amount sudah terdefinisi
+  if (charity && amount) {
+    const amountValue = parseInt(amount) || 0;
+    // Menggunakan raised sebagai properti untuk menambahkan donasi
+    charity.raised = charity.raised + amountValue;
+    try {
+      // Simulasi API call dengan timeout
+      const res = await new Promise(resolve => {
+        setTimeout(() => {
+          resolve({ status: 200, ok: true });
+        }, 1000);
+      });
+      console.log('Donasi berhasil:', res);
+      // Navigasi ke halaman success menggunakan router
+      router('/success'); // Ganti router.navigate dengan router
+    } catch (err) {
+      console.log('Error saat donasi:', err);
+      // Navigasi ke halaman error jika terjadi kesalahan
+      router('/error'); // Ganti router.navigate dengan router
     }
+  } else {
+    console.log('Data charity atau jumlah donasi tidak lengkap');
+    console.log('Charity:', charity);
+    console.log('Amount:', amount);
+  }
+}
 
 </script>
 <style>
@@ -90,9 +106,7 @@
 	        <div class="row">
 	            <div class="col-lg-6">
 	                <div class="xs-donation-form-images">
-                        <img src=
-	{charity.thumbnail} alt=
-	"Family Images"></div>
+                        <img src={charity.image} alt="Charity Image"></div>
 	            </div>
 	        <div class="col-lg-6">
 	            <div class="xs-donation-form-wraper">
@@ -154,7 +168,7 @@
                 </div>
                 <div class="xs-input-group">
                     <label for="xs-donate-agree">
-                        Terimakasih {name} atas donasi yang telah Anda berikan, Insya Allah donasi akan kami sampaikan untuk {charity.title} melalui {charity.profile_name},
+                        Terimakasih {name} atas donasi yang telah Anda berikan, Insya Allah donasi akan kami sampaikan untuk {charity.title},
                         Semoga menjadi Amal Jariyah dan Allah memberi keberkahan atas apa yang Anda berikan.
                       <span class="color-light-red">&#10084;&#10084;&#10084;</span>
                     </label>
@@ -196,7 +210,7 @@
 	</div>.
     <--xs-input-group END -->
 
-	<button type="submit" on:click|once={handleButtomClick} 
+	<button type="submit" 
   disabled = {!agree}
   class="btn btn-warning"><span class=
 	"badge"><i class="fa fa-heart"></i></span> Donate
